@@ -1,7 +1,11 @@
 <template>
   <div id="app" >
     <div v-show="!flag">
-      <Index></Index>
+      <!--<Index></Index>-->
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
+      <foot></foot>
     </div>
     <div class="advertising" ref="advertising" v-show="flag">
       <img :src="qiimg" />
@@ -11,7 +15,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import Index from 'components/index'
+import foot from 'base/foot'
 const flag = 1
 let m = 3
 let ftext = sessionStorage.getItem('flag')
@@ -59,7 +63,7 @@ export default {
     }
   },
   components: {
-    Index
+    foot
   }
 }
 </script>

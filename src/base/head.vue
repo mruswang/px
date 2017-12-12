@@ -2,7 +2,7 @@
   <div id="head">
     <header>
         <div>
-            <span id="site">...</span>
+            <popup-picker :title="title4" :data="list3" :columns="3" v-model="value4" show-name></popup-picker>
             <div>
                 <a href="">
                     请输入想搜索的内容
@@ -12,6 +12,47 @@
     </header>
   </div>
 </template>
+<script>
+  import { PopupPicker, Group, Cell, Picker, XButton, Divider, XSwitch } from 'vux'
+  import { cityt } from 'common/js/city'
+
+  export default {
+    components: {
+      PopupPicker,
+      Group,
+      Picker,
+      XButton,
+      Divider,
+      Cell,
+      XSwitch
+    },
+    methods: {
+      onChange (val) {
+        console.log('val change', val)
+      },
+
+      onShow () {
+        console.log('on show')
+      },
+      onHide (type) {
+        console.log('on hide', type)
+      }
+    },
+    data () {
+      return {
+        title4: '地址',
+        list3: [],
+        value4: [],
+        showPopupPicker: false,
+        formatDemoValue: ['01', '12'],
+        format: function (value, name) {
+          return `${value[0]}:${value[1]}`
+        }
+      }
+    }
+  }
+</script>
+
 
 <style type="text/css" scoped>
     #head{

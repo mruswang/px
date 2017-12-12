@@ -1,34 +1,38 @@
 <template>
   <div>
-    <swiper loop auto :list="demo06_list" :index="demo06_index" @on-index-change="demo06_onIndexChange"></swiper>
+    <swiper loop auto :list="imgurl" :index="demo06_index" @on-index-change="demo06_onIndexChange"></swiper>
   </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
 import { Swiper, GroupTitle, SwiperItem, XButton, Divider } from 'vux'
 
 export default {
   data () {
     return {
-      demo06_list: '',
+      imgurl: [],
       demo06_index: 0,
+      imglist: []
     }
   },
-  props: {
-    imglist: {
-      type: Array,
-      default: []
-    }
+  created () {
+    this.$http.get('http://peicentapi.demo.sclonsee.com/v1/index/ads', {position_id: 3, region_id: 510107000, type: '', size: ''}).then(response => {
+      this.imglist = response.data.data
+    }, response => {
+      alert(response)
+    })
   },
   mounted () {
-    this.getimg();
+    setTimeout(() => {
+      this.getimg()
+    }, 500)
   },
   methods: {
     demo06_onIndexChange (index) {
       this.demo06_index = index
     },
-    getimg(){
-        this.demo06_list = this.imglist.map((item, index) => ({
+    getimg () {
+      this.imgurl = this.imglist.map((item, index) => ({
         img: item.thumb[0]
       }))
     }

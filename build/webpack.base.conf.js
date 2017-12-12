@@ -39,6 +39,7 @@ const webpackConfig  = {
       '@': resolve('src'),
       'components': resolve('src/components'),
       'base': resolve('src/base'),
+      'common': resolve('src/common')
     }
   },
   module: {
