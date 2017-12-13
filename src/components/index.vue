@@ -11,14 +11,14 @@
         <span>最热活动</span>
       </div>
       <div class="huodong">
-                 <dl>
-                    <dt><img src="../assets/img/pic_huodong1.png" /></dt>
-                    <dd>学习讨论组织交流会</dd>
-                </dl>
-                <dl>
-                    <dt><img src="../assets/img/pic_huodong3.png" /></dt>
-                    <dd>儿童国学讨论会会会啦啦啦啦拉拉</dd>
-                </dl>
+         <dl>
+            <dt><img src="../assets/img/pic_huodong1.png" /></dt>
+            <dd>学习讨论组织交流会</dd>
+        </dl>
+        <dl>
+            <dt><img src="../assets/img/pic_huodong3.png" /></dt>
+            <dd>儿童国学讨论会会会啦啦啦啦拉拉</dd>
+        </dl>
          <div id="acMore" class="lookmore">
             <a href="./activity.html">
                 查看<br/>更多
@@ -30,45 +30,13 @@
         <span>资讯</span>
         <a href="./information.html">更多>></a>
       </div>
-      <ul class="list">
-
-                 <li class="noImg">
-                    <p>
-                    <span>置顶</span>资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题</p>
-                    <div class="infobtm"><span>资讯类别|来源</span><span>1000</span><span>20</span></div>
-                </li>
-
-                 <li class="noImg">
-                    <p>
-                    <span>置顶</span>资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题</p>
-                    <div class="imgBox">
-                        <img src="../assets/img/pic_huodong3.png" />
-                        <img src="../assets/img/pic_huodong3.png" />
-                        <img src="../assets/img/pic_huodong3.png" />
-                    </div>
-                    <div class="infobtm"><span>资讯类别|来源</span><span>1000</span><span>20</span></div>
-                </li>
-
-                 <li class="oneImg">
-                    <div class="infoBox">
-                        <p><span>置顶</span>资讯标题资讯标题资讯标题资讯标题</p>
-                        <div class="infobtm"><span>资讯类别|来源</span><span>1000</span><span>20</span></div>
-                    </div>
-                    <div class="imgBox">
-                        <img src="../assets/img/pic_huodong3.png" />
-                    </div>
-                </li>
-      </ul>
+      <zixun></zixun>
 
       <div class="conHt">
         <span>社区办事</span>
         <a href="./guide.html">更多>></a>
       </div>
-      <div class="dothing">
-                 <a href="javascript:;">锦江区工伤保险统筹管理的申请、确认程序的申请、确认程序</a>
-                <a href="javascript:;">锦江区工伤保险统筹管理的申请、确认程序</a>
-                <a href="javascript:;">锦江区工伤保险统筹管理的申请、确认程序</a>
-      </div>
+      <banshi></banshi>
     </section>
   </div>
 </template>
@@ -76,6 +44,8 @@
 <script type="text/ecmascript-6">
 import allhead from 'base/head'
 import lunbo from 'base/lunbo'
+import zixun from 'base/zixun'
+import banshi from 'base/banshi'
 export default {
   data () {
     return {
@@ -83,7 +53,7 @@ export default {
     }
   },
   components: {
-    lunbo, allhead
+    lunbo, allhead, zixun, banshi
   }
 }
 </script>
@@ -180,74 +150,11 @@ export default {
   .conHt a{
     font-size:.6rem;color:#828282;
   }
-  .dothing{
-    padding:.5rem;background: #fff;margin-bottom: .5rem;margin-bottom: 60px;
-  }
-  .dothing > a{
-    color:#2AB0F1;font-size:.75rem;height:2.5rem;display: block;
-    width: calc(100% - 1rem);border:1px solid #2AB0F1;overflow: hidden;text-overflow:ellipsis; white-space:nowrap;
-    border-radius:5px;margin-bottom:.5rem;line-height: 2.5rem;padding:0 .5rem;
-  }
+
   #content .news span{
     background-image:url(../assets/img/icon_zixun.png);
   }
-  .list{
-    padding:0 .5rem;background: #fff;
-  }
-  .list li{
-    list-style: none;padding:.5rem 0;
-    border-bottom: 1px solid #E0E0E0;
-  }
-  .list li:last-child{
-    border: 0;
-  }
-  .list li.noImg > p{
-    font-size:.75rem;color: #333;margin-bottom: .5rem;
-  }
-  .list li p span{
-    /*display: none;*/font-size:.6rem;color:#FE6459;border: 1px solid #FE6459;
-    border-radius: 5px;padding:0px 4px;margin-right:.3rem;
-  }
-  .list li p .top{
-    display: inline-block;
-  }
-  .list li .infobtm{
-    font-size:.5rem;color:#999;
-  }
-  .list li .infobtm span{
-    margin-right:.75rem;
-  }
-  .list li .infobtm span:nth-child(2){
-    padding-left:.65rem;background: url(../assets/img/icon_pinglun.png) no-repeat left center;
-    background-size:.45rem .4rem;
-  }
-  .list li .infobtm span:nth-child(3){
-    padding-left:.65rem;margin-right:0;background: url(../assets/img/icon_eye.png) no-repeat left center;
-    background-size:.45rem .35rem;
-  }
-  .list li.noImg .imgBox{
-    display: flex;align-items: center;
-    margin:.4rem 0;margin-top: 0;
-  }
-  .list li.noImg .imgBox img{
-    width:32%;height:3.65rem;margin-right:2%;
-  }
-  .list li.noImg .imgBox img:last-child{
-    margin-right:0;
-  }
 
-  .list .oneImg{
-    display: flex;justify-content: space-between;
-  }
-  .list .oneImg .infoBox{
-    margin-right:.5rem;flex: 1;
-  }
-  .list .oneImg .infoBox > p{
-    margin-bottom:.65rem;
-  }
-  .list .oneImg .imgBox img{
-    width:5.75rem;height:3.65rem;
-  }
   .gallery{
     opacity:0;
   }
