@@ -11,6 +11,7 @@ import Myactivity from '@/components/my_activity'
 import Mygoods from '@/components/my_goods'
 import Mytougao from '@/components/my_tougao'
 import Myextension from '@/components/my_extension'
+import Pushimformation from '@/components/push_imformation'
 
 Vue.use(Router)
 
@@ -70,6 +71,11 @@ export default new Router({
       path: '/my_extension',
       name: 'Myextension',
       component: Myextension
+    },
+    {
+      path: '/push_imformation',
+      name: 'Pushimformation',
+      component: Pushimformation
     }
   ]
 })
