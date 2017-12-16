@@ -12,6 +12,7 @@ import Mygoods from '@/components/my_goods'
 import Mytougao from '@/components/my_tougao'
 import Myextension from '@/components/my_extension'
 import Pushimformation from '@/components/push_imformation'
+import Pushhelp from '@/components/push_help'
 
 Vue.use(Router)
 
@@ -76,6 +77,11 @@ export default new Router({
       path: '/push_imformation',
       name: 'Pushimformation',
       component: Pushimformation
+    },
+    {
+      path: '/push_help',
+      name: 'Pushhelp',
+      component: Pushhelp
     }
   ]
 })

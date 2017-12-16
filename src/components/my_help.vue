@@ -8,7 +8,7 @@
       <scroller id="vux_view_box_body">
         <helps></helps>
       </scroller>
-      <add></add>
+      <add :url="url"></add>
     </div>
 </template>
 
@@ -36,7 +36,8 @@
         list4: ['正在放映', '即将上映'],
         demo4: '即将上映',
         demoDisabled: 'A',
-        index: 0
+        index: 0,
+        url: 'push_help'
       }
     },
     methods: {

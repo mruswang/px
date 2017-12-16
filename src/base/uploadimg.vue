@@ -3,12 +3,12 @@
     <ul class="uploader-img">
       <li><img src="../assets/img/2@2x.png" alt=""><span></span></li>
       <li><img src="../assets/img/2@2x.png" alt=""><span></span></li>
+      <!-- <li><img src="../assets/img/2@2x.png" alt=""><span></span></li>
       <li><img src="../assets/img/2@2x.png" alt=""><span></span></li>
       <li><img src="../assets/img/2@2x.png" alt=""><span></span></li>
       <li><img src="../assets/img/2@2x.png" alt=""><span></span></li>
-      <li><img src="../assets/img/2@2x.png" alt=""><span></span></li>
-      <li><img src="../assets/img/2@2x.png" alt=""><span></span></li>
-      <li class="uploader-box"></li>
+      <li><img src="../assets/img/2@2x.png" alt=""><span></span></li> -->
+      <li class="uploader-box" :class="`box${name}`"></li>
     </ul>
   </div>
 </template>
@@ -20,6 +20,10 @@
       return {
         height: 200
       }
+    },
+    props: {
+      name: '',
+      default: String
     },
     components: {
       XTextarea,

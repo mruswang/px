@@ -1,36 +1,16 @@
 <template>
   <div class="push-imfo">
     <group gutter='0'>
-      <x-input placeholder="请输入资讯标题" required :show-clear="true" placeholder-align="left"></x-input>
-    </group>
-    <div v-for="(item,index) in items" :index="index+1">
       <group gutter='0' class="text">
         <x-textarea :max="300" ref="contenttext" :height="height" placeholder="请填写内容"></x-textarea>
       </group>
-      <upload-img ref="contentimg" :name="index+1" ></upload-img>
-    </div>
-    <section class="addel" @click="add">
-      <img src="../assets/img/icon_add@2x.png" alt="">
-    </section>
-    <section class="coverimg">
-      <p class="tetx">封面图</p>
-      <upload-img name="fen"></upload-img>
-    </section>
-    <section class="other-set">
-      <p>其他设置</p>
-      <group gutter='0'>
-        <popup-picker title="所属兴趣" inline-desc="只能选择一个,未选择仅在个人主页展示" v-model="inname" :data="interest" :columns="1" show-name></popup-picker>
-        <popup-picker title="所属城市" :inline-desc="`[${formatDemoValue}]`" v-model="formatDemoValue" :data="[['01','02','03']]" :display-format="format"></popup-picker>
-        <popup-picker title="所属社区" :inline-desc="`[${formatDemoValue}]`" v-model="formatDemoValue" :data="[['01','02','03']]" :display-format="format"></popup-picker>
-        <x-switch title="开启赞赏" inline-desc="开启后可接收他人的赞赏" v-model="switch6"></x-switch>
-        <checklist  :options="commonList" v-model="radioValue" :max="1" @on-change="change"></checklist>
-        <x-input v-show="radioValue == '转载文章'" placeholder="请输入转载出处" required :show-clear="true" placeholder-align="left"></x-input>
-      </group>
-    </section>
-
+      <upload-img ref="contentimg"></upload-img>
+      <checklist :options="commonList" v-model="radioValue" :max="1" @on-change="change"></checklist>
+      <x-input title='悬赏金额' placeholder="请输入悬赏金额" required type="tel" :show-clear="true" placeholder-align="left"></x-input>
+    </group>
     <footer>
       <section class="footer-button">
-        <div class="save" bstatus="1">保存</div>
+        <div class="save" bstatus="1">取消</div>
         <div class="push" bstatus="10" @click="push">发布</div>
       </section>
     </footer>
@@ -51,8 +31,8 @@
           return `${value}`
         },
         switch6: false,
-        commonList: [ '原创文章', '转载文章' ],
-        radioValue: ['原创文章'],
+        commonList: [ '线上', '线下' ],
+        radioValue: [''],
         items: 1,
         imglist: [],
         interest: [],
@@ -125,6 +105,10 @@
 </script>
 
 <style scoped>
+  .weui-cells.weui-cells_checkbox {
+      margin-top: 0;
+      display: flex;
+  }
   .push-imfo{
     background-color: #f8f8f8;
   }
