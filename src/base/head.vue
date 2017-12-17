@@ -6,7 +6,10 @@
               <x-button @click.native="showPopupPicker = true" >{{ address }}</x-button>
             </div>
             <group style="display: none">
-              <popup-picker :show.sync="showPopupPicker" :show-cell="false" title="TEST" :columns="3" :data="list3" @on-change="onChange" ></popup-picker>
+              <popup-picker ref="picker1" :show.sync="showPopupPicker" @on-hide="onhide" :show-cell="false" title="TEST" :columns="3" :data="chdudata" @on-change="onChange"></popup-picker>
+            </group>
+            <group style="display: none">
+              <popup-picker ref="picker2" :show.sync="zshowPopupPicker" :show-cell="false" title="TEST" :columns="1" :data="children" @on-change="onChangea"></popup-picker>
             </group>
             <div class="search">
                 <a href="">
@@ -20,7 +23,7 @@
 </template>
 <script>
   import { PopupPicker, Group, Cell, Picker, XButton, Divider, XSwitch } from 'vux'
-
+  import { cityt } from 'common/js/chd'
   export default {
     components: {
       PopupPicker,
@@ -31,50 +34,60 @@
       Cell,
       XSwitch
     },
+    mounted () {
+      setTimeout(() => {
+        this.getchengdudata()
+      }, 500)
+    },
     methods: {
+      onhide (val) {
+        this.zaitype = val
+        if (this.zaitype) {
+          console.log(1)
+          let cparentid = this.parentid
+          console.log(cparentid)
+          this.$http.get('http://peicentapi.demo.sclonsee.com/v1/index/area', {params: {parent_id: cparentid}}).then(response => {
+            let childrendata = response.data.data
+            console.log(childrendata)
+            childrendata.map((item, index) => {
+              this.children.push({
+                name: item.label,
+                value: item.value,
+                parent: 0
+              })
+            })
+            setTimeout(() => {
+              this.zshowPopupPicker = true
+            }, 500)
+          }, response => {
+            alert(response)
+          })
+        }
+      },
       onChange (val) {
         console.log('val change', val)
-        this.address = val[3]
+        this.parentid = val[3]
+        // let getNameValues = this.$refs.picker1.getNameValues().lastIndexOf(' ')
+        // this.address = this.$refs.picker1.getNameValues().substr(getNameValues + 1)
+      },
+      onChangea (val) {
+        console.log('val change', val)
+        this.address = this.$refs.picker2.getNameValues()
+      },
+      getchengdudata () {
+        this.chdudata = cityt
       }
     },
     data () {
       return {
         title4: '地址',
-        list3: [{
-          name: '中国',
-          value: 'china',
-          parent: 0
-        }, {
-          name: '美国',
-          value: 'mei',
-          parent: 0
-        }, {
-          name: '中国1',
-          value: 'china1',
-          parent: 'china'
-        }, {
-          name: '中国11',
-          value: 'china11',
-          parent: 'china1'
-        }, {
-          name: '中国111',
-          value: 'china111',
-          parent: 'china11'
-        }, {
-          name: '美国1',
-          value: 'mei1',
-          parent: 'mei'
-        }, {
-          name: '美国11',
-          value: 'mei11',
-          parent: 'mei1'
-        }, {
-          name: '美国111',
-          value: 'mei111',
-          parent: 'mei11'
-        }],
+        chdudata: [],
         address: '...',
-        showPopupPicker: false
+        showPopupPicker: false,
+        zshowPopupPicker: false,
+        zaitype: false,
+        parentid: '',
+        children: []
       }
     }
   }

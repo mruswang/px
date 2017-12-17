@@ -17,6 +17,7 @@ import Pushhelp from '@/components/push_help'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',

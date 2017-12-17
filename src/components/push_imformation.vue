@@ -20,7 +20,7 @@
       <p>其他设置</p>
       <group gutter='0'>
         <popup-picker title="所属兴趣" inline-desc="只能选择一个,未选择仅在个人主页展示" v-model="inname" :data="interest" :columns="1" show-name></popup-picker>
-        <popup-picker title="所属城市" :inline-desc="`[${formatDemoValue}]`" v-model="formatDemoValue" :data="[['01','02','03']]" :display-format="format"></popup-picker>
+        <popup-picker title="所属城市" v-model="city" :data="chdudata" :columns="4" show-name ></popup-picker>
         <popup-picker title="所属社区" :inline-desc="`[${formatDemoValue}]`" v-model="formatDemoValue" :data="[['01','02','03']]" :display-format="format"></popup-picker>
         <x-switch title="开启赞赏" inline-desc="开启后可接收他人的赞赏" v-model="switch6"></x-switch>
         <checklist  :options="commonList" v-model="radioValue" :max="1" @on-change="change"></checklist>
@@ -41,6 +41,7 @@
   import { XTextarea, XInput, Group, XButton, Cell, PopupPicker, Picker, XSwitch, Checklist } from 'vux'
   import UploadImg from 'base/uploadimg'
   import { hasClass } from 'common/js/dom'
+  import { cityt } from 'common/js/chd'
   export default{
     data () {
       return {
@@ -56,7 +57,9 @@
         items: 1,
         imglist: [],
         interest: [],
-        inname: []
+        inname: [],
+        chdudata: [],
+        city: []
       }
     },
     components: {
@@ -76,11 +79,27 @@
     mounted () {
       setTimeout(() => {
         this.gutinterest()
+        this.getchengdudata()
+        this.getinit()
       }, 500)
     },
     methods: {
       change (value, label) {
         console.log('change:', value, label)
+      },
+      getinit () {
+        let _url = 'http://peicentapi.demo.sclonsee.com/v1/index/wx-config'
+        // 获取配置的config
+        let _url_ = window.location.href
+        this.$http.get(_url, {params: {url: _url_}}).then(response => {
+          let config = response.data.data
+          this.$wechat.config(config)
+        }, response => {
+          alert(response)
+        })
+      },
+      getchengdudata () {
+        this.chdudata = cityt
       },
       gutinterest () {
         this.$http.get('http://peicentapi.demo.sclonsee.com/v1/news/news-interest').then(response => {
