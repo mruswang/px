@@ -13,11 +13,11 @@ import Mytougao from '@/components/my_tougao'
 import Myextension from '@/components/my_extension'
 import Pushimformation from '@/components/push_imformation'
 import Pushhelp from '@/components/push_help'
+import ZixunDetails from '@/components/zixundetails'
 
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
   routes: [
     {
       path: '/',
@@ -83,6 +83,11 @@ export default new Router({
       path: '/push_help',
       name: 'Pushhelp',
       component: Pushhelp
+    },
+    {
+      path: '/zixundetails/:id/:mid',
+      name: 'ZixunDetails',
+      component: ZixunDetails
     }
   ]
 })

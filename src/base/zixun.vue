@@ -1,16 +1,16 @@
 <template>
   <div>
     <ul class="list">
-      <li v-for="(item, index) in list">
-        <div v-if="item.thumb.length === 1" class="oneimg">
+      <li v-for="(item, index) in list" v-show="index<num">
+        <div v-if="item.thumb.length === 1" class="oneimg" @click="godetails(item)">
           <div class="infoBox">
-            <p class="title">{{item.title}}</p>
+            <p class="title"><span v-show="item.is_top==='1'">置顶</span>{{item.title}}</p>
             <div class="infobtm">
               <span v-if="item.type === 1">个人资讯|{{item.attribute.name}}</span>
               <span v-else-if="item.type === 2">机构资讯|{{item.attribute.name}}</span>
               <span v-else="item.type === 3">官方资讯|{{item.attribute.name}}</span>
-              <span>1000</span>
-              <span>20</span>
+              <span>{{item.view}}</span>
+              <span>{{item.zan}}</span>
             </div>
           </div>
           <div class="imgBox">
@@ -18,25 +18,48 @@
           </div>
         </div>
         <div v-else-if="item.thumb.length === 2">
-          <p class="title">{{item.title}}</p>
+          <p class="title"><span v-show="item.is_top==='1'">置顶</span>{{item.title}}</p>
           <div class="imgBox">
             <img :src='item.thumb[0]' />
             <img :src='item.thumb[1]' />
           </div>
-          <div class="infobtm"><span>资讯类别|来源</span><span>1000</span><span>20</span></div>
+          <div class="infobtm">
+            <span v-if="item.type === 1">个人资讯|{{item.attribute.name}}</span>
+              <span v-else-if="item.type === 2">机构资讯|{{item.attribute.name}}</span>
+              <span v-else="item.type === 3">官方资讯|{{item.attribute.name}}</span>
+              <span>{{item.view}}</span>
+              <span>{{item.zan}}</span>
+          </div>
         </div>
         <div v-else-if="item.thumb.length >= 3">
-          <p class="title">{{item.title}}</p>
+          <p class="title"><span v-show="item.is_top==='1'">置顶</span>{{item.title}}</p>
           <div class="imgBox">
             <img :src='item.thumb[0]' />
             <img :src='item.thumb[1]' />
             <img :src='item.thumb[2]' />
           </div>
-          <div class="infobtm"><span>资讯类别|来源</span><span>1000</span><span>20</span></div>
+          <div class="infobtm">
+            <span v-if="item.type === 1">个人资讯|{{item.attribute.name}}</span>
+              <span v-else-if="item.type === 2">机构资讯|{{item.attribute.name}}</span>
+              <span v-else="item.type === 3">官方资讯|{{item.attribute.name}}</span>
+              <span>{{item.view}}</span>
+              <span>{{item.zan}}</span>
+          </div>
         </div>
         <div v-else>
-          <p class="title">{{item.title}}</p>
-          <div class="infobtm"><span>资讯类别|来源</span><span>1000</span><span>20</span></div>
+          <p class="title"><span v-show="item.is_top==='1'">置顶</span>{{item.title}}</p>
+          <div class="infobtm">
+            <span v-if="item.type === 1">个人资讯|{{item.attribute.name}}</span>
+              <span v-else-if="item.type === 2">机构资讯|{{item.attribute.name}}</span>
+              <span v-else="item.type === 3">官方资讯|{{item.attribute.name}}</span>
+              <span>{{item.view}}</span>
+              <span>{{item.zan}}</span>
+          </div>
+        </div>
+        <div v-show="fromindex === 'mine' && item.status !== '10'" class="mangerstatus"><span v-show="item.status !== '10'" @click="editzixun(item)">编辑</span><span v-show="item.status !== '10'" @click="delzixun(item)">删除</span></div>
+        <div v-show="fromindex === 'mine' && item.status !== '10'">
+          <div class="item-status" :class="{'blue':item.status==='3'}"></div>
+          <div class="item-text"><span>{{item.status_str}}</span></div>
         </div>
       </li>
     </ul>
@@ -50,6 +73,16 @@
         list: []
       }
     },
+    props: {
+      fromindex: {
+        type: String,
+        default: ''
+      },
+      num: {
+        type: String,
+        default: '15'
+      }
+    },
     created () {
       this.$http.get('http://peicentapi.demo.sclonsee.com/v1/news/index', {params: {target_id: this.$route.params.id, type: this.$route.params.type, flag: 3}}).then(response => {
         console.log(response.data.data)
@@ -59,14 +92,16 @@
       })
     },
     mounted () {
-      setTimeout(() => {
-        this.getimg()
-      }, 500)
     },
     methods: {
-      getimg () {
-        console.log(this.$route.params.type)
-        console.log(this.$route.params.id)
+      godetails (item) {
+        this.$router.push({ path: `/zixundetails/${item.id}/${item.attribute.id}` })
+      },
+      editzixun (item) {
+        console.log(item)
+      },
+      delzixun (item) {
+        console.log(item)
       }
     }
   }
@@ -79,6 +114,7 @@
   .list li{
     list-style: none;padding:.5rem 0;
     border-bottom: 1px solid #E0E0E0;
+    position: relative;
   }
   .list li:last-child{
     border: 0;
@@ -100,6 +136,14 @@
   .title{
     font-size:.9rem;color: #333;margin-bottom: .5rem;
   }
+  .title span{
+    font-size: 0.7rem;
+    color: #FE6459;
+    border:1px solid #FE6459;
+    padding:0 5px;
+    border-radius: 5px;
+    margin-right: 5px;
+  }
   .imgBox{
     display: flex;
   }
@@ -110,13 +154,6 @@
   .imgBox img:nth-child(2){
     margin: 0 10px;
   }
-  /*.list li p span{
-    font-size:.6rem;color:#FE6459;border: 1px solid #FE6459;
-    border-radius: 5px;padding:0px 4px;margin-right:.3rem;
-  }
-  .list li p .top{
-    display: inline-block;
-  }*/
   .list li .infobtm{
     font-size:.5rem;color:#999;
   }
@@ -130,5 +167,46 @@
   .list li .infobtm span:nth-child(3){
     padding-left:.65rem;margin-right:0;background: url(../assets/img/icon_eye.png) no-repeat left center;
     background-size:.45rem .35rem;
+  }
+  .mangerstatus{
+    border-top: 1px solid #eee;
+    text-align: right;
+    margin-top: 10px;
+    padding-top: 5px;
+  }
+  .mangerstatus span{
+    font-size: 0.6rem;
+    border:1px solid #ddd;
+    padding: 4px 10px;
+    border-radius: 5px;
+    margin: 5px
+  }
+  .item-status{
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-top: 50px solid #999;
+    border-left: 50px solid transparent;
+  }
+  .orange{
+     border-top-color: #FBB254; 
+  }
+  .blue{
+      border-top-color: #2AAFF1 !important;
+  }
+  .item-text{
+      transform: rotate(45deg); 
+      position: absolute;
+      top: 0;
+      right: 0;
+      width:50px;
+      height: 50px;
+      line-height: 25px;
+      font-size: 0.4rem;
+      color: #fff;
+      text-align: center;
+  }
+  .bg-gray{
+      background-color: #dedede;
   }
 </style>

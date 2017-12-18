@@ -2,9 +2,9 @@
   <div id="app" >
     <div v-show="!flag">
       <!--<Index></Index>-->
-      <keep-alive>
+
         <router-view></router-view>
-      </keep-alive>
+
       <foot></foot>
     </div>
     <div class="advertising" ref="advertising" v-show="flag">
@@ -46,11 +46,14 @@ export default {
             window.clearInterval(dao)
             this.$refs.advertising.style.display = 'none'
             sessionStorage.setItem('flag', flag)
+
             this.flag = false
           }
           this.miao()
         }, 1000)
       }
+      let storage = window.localStorage
+      storage.setItem('uid', '9')
     },
     miao () {
       m--

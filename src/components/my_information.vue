@@ -1,9 +1,9 @@
 <template>
   <div>
     <scroller>
-      <zixun></zixun>
+      <zixun :fromindex="fromindex"></zixun>
     </scroller>
-    <add :url="url"></add>
+    <add :url="url" ></add>
   </div>
 </template>
 
@@ -14,7 +14,8 @@
   export default{
     data () {
       return {
-        url: 'push_imformation'
+        url: 'push_imformation',
+        fromindex: 'mine'
       }
     },
     components: {
