@@ -159,7 +159,7 @@
       },
       go (item) {
         console.log(item)
-        this.$router.push({ path: item.url })
+        this.$router.push({ path: `${item.url}/1/9` })
       }
     }
   }

@@ -30,7 +30,7 @@ export default new Router({
       component: Mine
     },
     {
-      path: '/my_information',
+      path: '/my_information/:type/:id',
       name: 'Myinformation',
       component: Myinformation
     },

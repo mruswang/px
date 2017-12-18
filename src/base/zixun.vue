@@ -1,39 +1,75 @@
 <template>
   <div>
     <ul class="list">
-
-      <li class="noImg">
-        <p>
-          <span>置顶</span>资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题</p>
-        <div class="infobtm"><span>资讯类别|来源</span><span>1000</span><span>20</span></div>
-      </li>
-
-      <li class="noImg">
-        <p>
-          <span>置顶</span>资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题资讯标题</p>
-        <div class="imgBox">
-          <img src="../assets/img/pic_huodong3.png" />
-          <img src="../assets/img/pic_huodong3.png" />
-          <img src="../assets/img/pic_huodong3.png" />
+      <li v-for="(item, index) in list">
+        <div v-if="item.thumb.length === 1" class="oneimg">
+          <div class="infoBox">
+            <p class="title">{{item.title}}</p>
+            <div class="infobtm">
+              <span v-if="item.type === 1">个人资讯|{{item.attribute.name}}</span>
+              <span v-else-if="item.type === 2">机构资讯|{{item.attribute.name}}</span>
+              <span v-else="item.type === 3">官方资讯|{{item.attribute.name}}</span>
+              <span>1000</span>
+              <span>20</span>
+            </div>
+          </div>
+          <div class="imgBox">
+            <img :src='item.thumb[0]' />
+          </div>
         </div>
-        <div class="infobtm"><span>资讯类别|来源</span><span>1000</span><span>20</span></div>
-      </li>
-
-      <li class="oneImg">
-        <div class="infoBox">
-          <p><span>置顶</span>资讯标题资讯标题资讯标题资讯标题</p>
+        <div v-else-if="item.thumb.length === 2">
+          <p class="title">{{item.title}}</p>
+          <div class="imgBox">
+            <img :src='item.thumb[0]' />
+            <img :src='item.thumb[1]' />
+          </div>
           <div class="infobtm"><span>资讯类别|来源</span><span>1000</span><span>20</span></div>
         </div>
-        <div class="imgBox">
-          <img src="../assets/img/pic_huodong3.png" />
+        <div v-else-if="item.thumb.length >= 3">
+          <p class="title">{{item.title}}</p>
+          <div class="imgBox">
+            <img :src='item.thumb[0]' />
+            <img :src='item.thumb[1]' />
+            <img :src='item.thumb[2]' />
+          </div>
+          <div class="infobtm"><span>资讯类别|来源</span><span>1000</span><span>20</span></div>
+        </div>
+        <div v-else>
+          <p class="title">{{item.title}}</p>
+          <div class="infobtm"><span>资讯类别|来源</span><span>1000</span><span>20</span></div>
         </div>
       </li>
     </ul>
   </div>
 </template>
 
-<script type="text/ecmascript-6">
-
+<script>
+  export default {
+    data () {
+      return {
+        list: []
+      }
+    },
+    created () {
+      this.$http.get('http://peicentapi.demo.sclonsee.com/v1/news/index', {params: {target_id: this.$route.params.id, type: this.$route.params.type, flag: 3}}).then(response => {
+        console.log(response.data.data)
+        this.list = response.data.data
+      }, response => {
+        alert(response)
+      })
+    },
+    mounted () {
+      setTimeout(() => {
+        this.getimg()
+      }, 500)
+    },
+    methods: {
+      getimg () {
+        console.log(this.$route.params.type)
+        console.log(this.$route.params.id)
+      }
+    }
+  }
 </script>
 
 <style scoped>
@@ -47,16 +83,40 @@
   .list li:last-child{
     border: 0;
   }
-  .list li.noImg > p{
-    font-size:.75rem;color: #333;margin-bottom: .5rem;
+  .oneimg{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
-  .list li p span{
-    /*display: none;*/font-size:.6rem;color:#FE6459;border: 1px solid #FE6459;
+  .oneimg .infoBox{
+    flex: 1;
+  }
+  .oneimg .imgBox{
+    width:5.75rem;
+  }
+  .oneimg .imgBox img{
+    width:5.75rem;height:3.65rem;
+  }
+  .title{
+    font-size:.9rem;color: #333;margin-bottom: .5rem;
+  }
+  .imgBox{
+    display: flex;
+  }
+  .imgBox img{
+    flex: 1;
+    width:5.75rem;height:3.65rem;
+  }
+  .imgBox img:nth-child(2){
+    margin: 0 10px;
+  }
+  /*.list li p span{
+    font-size:.6rem;color:#FE6459;border: 1px solid #FE6459;
     border-radius: 5px;padding:0px 4px;margin-right:.3rem;
   }
   .list li p .top{
     display: inline-block;
-  }
+  }*/
   .list li .infobtm{
     font-size:.5rem;color:#999;
   }
@@ -70,28 +130,5 @@
   .list li .infobtm span:nth-child(3){
     padding-left:.65rem;margin-right:0;background: url(../assets/img/icon_eye.png) no-repeat left center;
     background-size:.45rem .35rem;
-  }
-  .list li.noImg .imgBox{
-    display: flex;align-items: center;
-    margin:.4rem 0;margin-top: 0;
-  }
-  .list li.noImg .imgBox img{
-    width:32%;height:3.65rem;margin-right:2%;
-  }
-  .list li.noImg .imgBox img:last-child{
-    margin-right:0;
-  }
-
-  .list .oneImg{
-    display: flex;justify-content: space-between;
-  }
-  .list .oneImg .infoBox{
-    margin-right:.5rem;flex: 1;
-  }
-  .list .oneImg .infoBox > p{
-    margin-bottom:.65rem;
-  }
-  .list .oneImg .imgBox img{
-    width:5.75rem;height:3.65rem;
   }
 </style>
