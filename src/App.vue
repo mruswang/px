@@ -14,7 +14,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import foot from 'base/foot'
 const flag = 1
 let m = 3

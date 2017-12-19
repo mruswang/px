@@ -11,8 +11,10 @@
 		    	</div>
 		    </div>
 		    <div class="btnBox" v-show="this.$route.params.mid !== mid">
-		    	<a href="javascript:;" class="btn guanzhu">关注</a>
-		    	<a href="javascript:;" class="btn shoucang">收藏</a>
+		    	<a href="javascript:;" @click="guanzhu(imglist)" v-if="imglist.is_floow === '否'" class="btn guanzhu">关注</a>
+		    	<a href="javascript:;" @click="quxaioguanzhu(imglist)" v-else="imglist.is_floow === '是'" class="btn guanzhu active">已关注</a>
+		    	<a href="javascript:;" @click="shoucang(imglist)" v-if="imglist.is_collect === '否'" class="btn shoucang">收藏</a>
+		    	<a href="javascript:;" @click="quxaioshoucang(imglist)" v-else="imglist.is_collect === '是'" class="btn shoucang active">已收藏</a>
 		    </div>
 		    <div class="delinformation"  v-show="this.$route.params.mid === mid">
 		    	<span>删除</span>
@@ -42,44 +44,32 @@
 		</div>
 	</section>
 
-	<section class="comment">
+	<section class="comment" >
 		<div class="title">
 			<p>
 				<span></span>
 				<span>资讯评论</span>
 			</p>
-			<a href="javascript:;" class="chco">查看全部条评论></a>
+			<a href="javascript:;" class="chco" v-show="comment.length>0">查看全部条评论></a>
 		</div>
 
 
-		<ul class="comment-ul">
-			<li>
-				<img src="../assets/img/icon_qq.png" />
+		<ul class="comment-ul" v-show="comment.length>0">
+			<li v-for="(item,index) in comment">
+				<img :src="item.photo" />
 				<div class="liCon">
-					<p><span>不知道用啥名</span><span data-zan="0" class="zan">123</span></p>
-					<a href="./all_reply.html" class="txt">显示10条,评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容,全部显示
-					</a>
-					<div class="smone">
-						<span>我是昵称等人</span><a href="./all_reply.html">共2条回复></a>
+					<p><span>{{item.nickname}}</span><span class="zan">{{item.zan}}</span></p>
+					<a href="./all_reply.html" class="txt">{{item.content}}</a>
+					<div class="smone" v-show="item.repply.length>0">
+						<span>{{item.repply[0].nickname}}</span><a href="javascript:;">共{{item.repply.length}}条回复></a>
 					</div>
-					<p class="timeBox"><span>10.21 09:30</span><span data-name="不知道用啥名" class="huifu">回复</span></p>
-				</div>
-			</li>
-			<li>
-				<img src="../assets/img/icon_qq.png" />
-				<div class="liCon">
-					<p><span>难道我知道？</span><span data-zan="0" class="zan">123</span></p>
-					<a href="./all_reply.html" class="txt">显示10条,评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容,全部显示
-					</a>
-					<div class="smone">
-						<span>我是昵称等人</span><a href="./all_reply.html">共2条回复></a>
-					</div>
-					<p class="timeBox"><span>10.21 09:30</span><span data-name="难道我知道？" class="huifu">回复</span></p>
+					<p class="timeBox"><span>{{item.created_at}}</span><span class="huifu">回复</span></p>
 				</div>
 			</li>
 		</ul>
 	</section>
-	<a href="javascript:;" onclick="goPlist(this);" class="downMore">查看全部条评论</a>
+	<a href="javascript:;" class="downMore" v-show="comment.length>0">查看全部条评论</a>
+	<a href="javascript:;" class="downMore" v-show="comment.length=='0'">暂无评论</a>
 	<section class="share">
 	  <img src="../assets/img/share_.png" alt="">
 	  <p>请点击右上角</p>
@@ -136,18 +126,30 @@ export default{
     return {
       imglist: [],
       uptime: '',
-      mid: ''
+      mid: '',
+      comment: []
     }
   },
   created () {
-    let storage = window.localStorage
-    this.mid = storage.getItem('uid')
-    this.$http.get('http://peicentapi.demo.sclonsee.com/v1/news/detail', {params: { id: this.$route.params.id, member_id: this.mid }}).then(response => {
-      this.imglist = response.data.data
-      console.log(response.data.data)
-    }, response => {
-      alert(response)
-    })
+    this.get()
+  },
+  methods: {
+    get () {
+      let storage = window.localStorage
+      this.mid = storage.getItem('uid')
+      this.$http.get('http://peicentapi.demo.sclonsee.com/v1/news/detail', {params: { id: this.$route.params.id, member_id: this.mid }}).then(response => {
+        this.imglist = response.data.data
+        console.log(response.data.data)
+      }, response => {
+        alert(response)
+      })
+      this.$http.get('http://peicentapi.demo.sclonsee.com/v1/news/comment', {params: { id: this.$route.params.id, member_id: this.mid, page: 1 }}).then(response => {
+        this.comment = response.data.data
+        console.log(response.data.data)
+      }, response => {
+        alert(response)
+      })
+    }
   }
 }
 </script>

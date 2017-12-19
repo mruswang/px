@@ -30,7 +30,7 @@
         <span>资讯</span>
         <a href="./information.html">更多>></a>
       </div>
-      <zixun num='5'></zixun>
+      <!-- <zixun :num='5'></zixun> -->
 
       <div class="conHt">
         <span>社区办事</span>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul class="list">
-      <li v-for="(item, index) in list" v-show="index<num">
+      <li v-for="(item, index) in data" v-show="index< num">
         <div v-if="item.thumb.length === 1" class="oneimg" @click="godetails(item)">
           <div class="infoBox">
             <p class="title"><span v-show="item.is_top==='1'">置顶</span>{{item.title}}</p>
@@ -17,7 +17,7 @@
             <img :src='item.thumb[0]' />
           </div>
         </div>
-        <div v-else-if="item.thumb.length === 2">
+        <div v-else-if="item.thumb.length === 2" @click="godetails(item)">
           <p class="title"><span v-show="item.is_top==='1'">置顶</span>{{item.title}}</p>
           <div class="imgBox">
             <img :src='item.thumb[0]' />
@@ -31,7 +31,7 @@
               <span>{{item.zan}}</span>
           </div>
         </div>
-        <div v-else-if="item.thumb.length >= 3">
+        <div v-else-if="item.thumb.length >= 3" @click="godetails(item)">
           <p class="title"><span v-show="item.is_top==='1'">置顶</span>{{item.title}}</p>
           <div class="imgBox">
             <img :src='item.thumb[0]' />
@@ -46,7 +46,7 @@
               <span>{{item.zan}}</span>
           </div>
         </div>
-        <div v-else>
+        <div v-else @click="godetails(item)">
           <p class="title"><span v-show="item.is_top==='1'">置顶</span>{{item.title}}</p>
           <div class="infobtm">
             <span v-if="item.type === 1">个人资讯|{{item.attribute.name}}</span>
@@ -70,7 +70,8 @@
   export default {
     data () {
       return {
-        list: []
+        list: [],
+        allnum: ''
       }
     },
     props: {
@@ -79,19 +80,17 @@
         default: ''
       },
       num: {
-        type: String,
-        default: '15'
+        type: Number,
+        default: 15
+      },
+      page: {
+        type: Number,
+        default: 1
+      },
+      data: {
+        type: Array,
+        default: []
       }
-    },
-    created () {
-      this.$http.get('http://peicentapi.demo.sclonsee.com/v1/news/index', {params: {target_id: this.$route.params.id, type: this.$route.params.type, flag: 3}}).then(response => {
-        console.log(response.data.data)
-        this.list = response.data.data
-      }, response => {
-        alert(response)
-      })
-    },
-    mounted () {
     },
     methods: {
       godetails (item) {

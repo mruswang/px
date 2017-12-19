@@ -14,6 +14,7 @@ import Myextension from '@/components/my_extension'
 import Pushimformation from '@/components/push_imformation'
 import Pushhelp from '@/components/push_help'
 import ZixunDetails from '@/components/zixundetails'
+import HelpDetails from '@/components/helpdetails'
 
 Vue.use(Router)
 
@@ -88,6 +89,11 @@ export default new Router({
       path: '/zixundetails/:id/:mid',
       name: 'ZixunDetails',
       component: ZixunDetails
+    },
+    {
+      path: '/helpdetails/:id/:mid',
+      name: 'HelpDetails',
+      component: HelpDetails
     }
   ]
 })

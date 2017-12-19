@@ -84,7 +84,7 @@
   </div>
 </template>
 
-<script type='text/ecmascript-6'>
+<script >
   import { Grid, GridItem, GroupTitle } from 'vux'
 
   export default {
@@ -145,7 +145,8 @@
             url: './my_extension',
             icon: require('../assets/img/icon_tg_2x.png')
           }
-        ]
+        ],
+        mid: ''
       }
     },
     components: {
@@ -159,7 +160,9 @@
       },
       go (item) {
         console.log(item)
-        this.$router.push({ path: `${item.url}/1/9` })
+        let storage = window.localStorage
+        this.mid = storage.getItem('uid')
+        this.$router.push({ path: `${item.url}/1/${this.mid}` })
       }
     }
   }
