@@ -1,110 +1,134 @@
 <template>
-  <div class='head'>
-    <allhead></allhead>
-    <lunbo ></lunbo>
-    <div class="classify">
-        <span v-for="(item,index) in category" :class="item.classname"><a href="javascript:;" @click="gopage(item,index)">{{item.name}}</a></span>
-    </div>
-    <section id="content">
-      <div class="conH">
-        <span>最热活动</span>
+  <div class="container">
+    <allhead class='head'></allhead>
+    <ul class="topnav">
+      <li v-for="(item,index) in listtop" @click="slect(item)" :class="{'active':item.id === cat_id}">{{item.name}}</li>
+    </ul>
+    <scroller ref="scroll" class="scroll"
+        :data="list"
+        :pulldown="pulldown"
+        :pullup="pullup"
+        @pulldown="pulldowndata"
+        @scrollToEnd="pullupdata"
+        :refreshDelay="refreshDelay">
+      <div class="scroll-content">
+        <store :fromindex="fromindex" :data="list"></store>
+        <div class="alldata" v-show="nodata">我是有底线的</div>
       </div>
-      <div class="huodong">
-         <dl v-for="(item,index) in list.activity">
-            <dt><img :src="item.pics[0]" /></dt>
-            <dd>{{item.name}}</dd>
-        </dl>
-        <div id="acMore" class="lookmore">
-            <a href="./activity.html">
-                查看<br/>更多
-            </a>
-        </div>
-      </div>
-
-      <div class="conHt news">
-        <span>资讯</span>
-        <a href="./information.html">更多>></a>
-      </div>
-      <zixun :num='5' :data="list.news"></zixun>
-
-      <div class="conHt">
-        <span>社区办事</span>
-        <a href="./guide.html">更多>></a>
-      </div>
-      <banshi :data="list.zhinan"></banshi>
-    </section>
+    </scroller>
   </div>
 </template>
 
 <script>
+import scroller from 'base/scroller'
 import allhead from 'base/head'
-import lunbo from 'base/lunbo'
-import zixun from 'base/zixun'
-import banshi from 'base/banshi'
+import store from 'base/store'
 export default {
   data () {
     return {
+      listtop: [{
+        id: '',
+        name: '全部'
+      }],
+      cat_id: '',
       list: [],
-      imglist: [],
-      category: [
-        {
-          name: '社区订座',
-          classname: '',
-          url: './seat'
-        },
-        {
-          name: '乐享社区',
-          classname: '',
-          url: './shops'
-        },
-        {
-          name: '活动',
-          classname: '',
-          url: './activity'
-        },
-        {
-          name: '社区互助',
-          classname: 'down',
-          url: './piazza'
-        },
-        {
-          name: '社区机构',
-          classname: 'down',
-          url: './organization'
-        },
-        {
-          name: '社区办事',
-          classname: 'down',
-          url: './guide'
-        }
-      ]
+      fromindex: 'dating',
+      pulldown: true,
+      pullup: true,
+      nodata: false,
+      refreshDelay: 500,
+      page: 1
     }
   },
   created () {
-    setTimeout(() => {
-      this._loadData()
-    }, 30)
+    this._loadinterest()
   },
   methods: {
+    _loadinterest () {
+      this.$http.get('http://peicentapi.demo.sclonsee.com/v1/shop/shop-type').then(response => {
+        this.listtop = this.listtop.concat(response.data.data)
+        console.log(this.listtop)
+        this._loadData()
+      }, response => {
+        alert(response)
+      })
+    },
     _loadData () {
-      this.$http.get('http://peicentapi.demo.sclonsee.com/v1/index', {params: { flag: 1, province_id: 51, city_id: 510100000000, region_id: 510104000000, street_id: 510104020000, community_id: 659004502528 }}).then(response => {
-        this.list = response.data.data
+      this.$http.get('http://peicentapi.demo.sclonsee.com/v1/shop/index', {params: { flag: 1, type_id: this.cat_id, page: this.page, province_id: 51, city_id: 510100000000, region_id: 510104000000, street_id: 510104020000, community_id: 659004502528, status: 2, lat: 30.591, long: 104.0502 }}).then(response => {
+        this.list = this.list.concat(response.data.data)
+        if (response.data.data.length > 0) {
+          this.all = this.list.length
+        } else {
+          this.nodata = true
+        }
         console.log(this.list)
       }, response => {
         alert(response)
       })
     },
-    gopage (item, index) {
-      this.$router.push({path: `${item.url}`})
+    pullupdata () {
+      if (!this.nodata) {
+        this.page ++
+        this._loadData()
+      } else {
+        this.nodata = true
+      }
+    },
+    pulldowndata () {
+      this.page = 1
+      this.list = []
+      this._loadData()
+    },
+    slect (item) {
+      this.page = 1
+      this.list = []
+      this.cat_id = item.id
+      this._loadData()
     }
   },
   components: {
-    lunbo, allhead, zixun, banshi
+    allhead, store, scroller
   }
 }
 </script>
 
 <style>
+.container{
+  position: fixed;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+}
+.scroll{
+  height: 100%;
+  overflow: hidden;
+}
+.scroll-content{
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding-bottom: 100px;
+}
+.alldata{
+  text-align: center;
+  background-color: #dedede;
+}     
+.topnav{
+  width: 100%;
+  overflow-x:auto;
+  white-space:nowrap;
+  margin-top: 10px;
+}
+.topnav li{
+  padding: 0 5px;
+  border-radius: 50%;
+  margin: 5px;
+  display: inline-block;
+ }
+ .active{
+    color: rgb(240,88,18);
+    border-bottom: 2px solid rgb(240,88,18);
+ }
   .head{
     background: url('../assets/img/pic_index_bk.png') no-repeat center center;
     background-size: 100% 100%;

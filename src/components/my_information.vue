@@ -58,8 +58,12 @@ export default {
       })
     },
     pullupdata () {
-      this.page ++
-      this.loadData()
+      if (!this.nodata) {
+        this.page ++
+        this.loadData()
+      } else {
+        this.nodata = true
+      }
     },
     pulldowndata () {
       this.page = 1

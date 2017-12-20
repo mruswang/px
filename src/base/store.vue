@@ -1,16 +1,18 @@
 <template>
   <div>
     <ul class="content">
-      <li>
-        <img src="../assets/img/7_2x.png" />
+      <li v-for="(item,index) in data">
+        <img :src="item.thumb[0]" />
         <div>
-          <p>店铺名称店铺名称店</p>
-          <p>店铺类型</p>
-          <p>店铺位置店铺位置店铺位置店铺位置店铺位置</p>
+          <p>{{item.name}}</p>
+          <p>{{item.type_name}}</p>
+          <p>{{item.address}}</p>
         </div>
         <p>
-          <span>0</span>
-          <span>创建者</span>
+          <span>{{item.set_num}}</span>
+          <span v-show="fromindex==='dating'">{{item.distance}}KM</span>
+          <span v-show="fromindex==='mine'" v-if="item.member_id == myid">创建者</span>
+          <span v-show="fromindex==='mine'" v-else>营业员</span>
         </p>
       </li>
     </ul>
@@ -18,6 +20,28 @@
 </template>
 
 <script>
+export default {
+  data () {
+    return {
+      myid: ''
+    }
+  },
+  props: {
+    data: {
+      type: Array,
+      default: []
+    },
+    fromindex: {
+      type: String,
+      default: ''
+    }
+  },
+  created () {
+    this.myid = 9
+  },
+  methods: {
+  }
+}
 </script>
 
 <style scoped>

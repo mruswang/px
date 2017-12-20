@@ -68,7 +68,7 @@
       <div class="mine-type">
         <grid :cols="3">
           <grid-item v-for="(item,index) in allmine" :key="index">
-              <a href="javascript:;" class="grid-center" :class="item.classname" @click="go(item)">
+              <a href="javascript:;" class="grid-center" :class="item.classname" @click="go(item,index)">
                 <div class="weui-grid__icon">
                   <img :src="item.icon" alt="">
                   <!-- <span class="weui-grid-dot"></span> -->
@@ -158,11 +158,14 @@
       onItemClick () {
         console.log('on item click')
       },
-      go (item) {
-        console.log(item)
+      go (item, index) {
         let storage = window.localStorage
         this.mid = storage.getItem('uid')
-        this.$router.push({ path: `${item.url}/1/${this.mid}` })
+        if (index === 7) {
+          this.$router.push({path: `${item.url}/3/${this.mid}`})
+        } else {
+          this.$router.push({path: `${item.url}/1/${this.mid}`})
+        }
       }
     }
   }

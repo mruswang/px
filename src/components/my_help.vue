@@ -1,11 +1,11 @@
 <template>
   <div class="container">
-    <sticky scroll-box="vux_view_box_body"  :check-sticky-support="true" :offset="46">
+    <sticky :offset="46">
       <tab :line-width=3 >
-        <tab-item :selected="demo4 === item"  v-for="(item, index) in list4" @click="demo4 = item" :key="index">{{item}}</tab-item>
+        <tab-item :selected="top_index === item"  v-for="(item, index) in listtop" @on-item-click="democlcik(index)" :key="index">{{item}}</tab-item>
       </tab>
     </sticky>
-    <Scroll id="vux_view_box_body" ref="scroll" class="scroll"
+    <scroller ref="scroll" class="scroll"
         :data="list"
         :pulldown="pulldown"
         :pullup="pullup"
@@ -13,10 +13,10 @@
         @scrollToEnd="pullupdata"
         :refreshDelay="refreshDelay">
       <div class="scroll-content">
-        <helps></helps>
+        <helps :data="list"></helps>
         <div class="alldata" v-show="nodata">我是有底线的</div>
       </div>
-    </Scroll>
+    </scroller>
     <add :url="url"></add>
   </div>
 </template>
@@ -39,10 +39,8 @@ export default{
   },
   data () {
     return {
-      index01: 0,
-      list4: ['正在放映', '即将上映'],
-      demo4: '即将上映',
-      demoDisabled: 'A',
+      listtop: ['我的互助', '我的参与'],
+      top_index: '我的互助',
       index: 0,
       url: 'push_help',
       page: 1,
@@ -51,35 +49,52 @@ export default{
       pulldown: true,
       pullup: true,
       nodata: false,
-      refreshDelay: 500
+      refreshDelay: 500,
+      geturl: 'http://peicentapi.demo.sclonsee.com/v1/help/index'
     }
   },
   created () {
     setTimeout(() => {
-      this.loadData()
+      this._loadData()
     }, 30)
   },
   methods: {
-    loadData () {
-      this.$http.get('http://peicentapi.demo.sclonsee.com/v1/news/index', {params: {target_id: this.$route.params.id, type: this.$route.params.type, page: this.page, flag: 3}}).then(response => {
+    _loadData () {
+      this.$http.get(this.geturl, {params: {member_id: this.$route.params.id, page: this.page, flag: 3}}).then(response => {
         this.list = this.list.concat(response.data.data)
         if (response.data.data.length > 0) {
           this.all = this.list.length
         } else {
           this.nodata = true
         }
+        console.log(this.list)
       }, response => {
         alert(response)
       })
     },
     pullupdata () {
-      this.page ++
-      this.loadData()
+      if (!this.nodata) {
+        this.page ++
+        this._loadData()
+      } else {
+        this.nodata = true
+      }
     },
     pulldowndata () {
       this.page = 1
       this.list = []
-      this.loadData()
+      this._loadData()
+    },
+    democlcik (demo) {
+      if (demo === 1) {
+        this.geturl = 'http://peicentapi.demo.sclonsee.com/v1/help/my-join'
+      } else {
+        this.geturl = 'http://peicentapi.demo.sclonsee.com/v1/help/index'
+      }
+      this.page = 1
+      this.list = []
+      this._loadData()
+      console.log(demo)
     }
   }
 }
@@ -102,7 +117,7 @@ export default{
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding-bottom: 60px;
+  padding-bottom: 100px;
 }
 .alldata{
   text-align: center;

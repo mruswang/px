@@ -1,107 +1,44 @@
 <template>
   <div>
     <ul>
-       <li class="swiper-slide-item">
+       <li class="swiper-slide-item" v-for="(item,index) in data">
           <div class="swiper-slide-item-title">
              <div class="swiper-slide-item-title-left">
-                <img src="../assets/img/2@2x.png" alt="">
+                <img :src="item.photo" alt="">
                 <div class="swiper-slide-item-title-text">
-                    <span class="nickname">用户昵称</span>
-                    <p><span>采纳率：98%</span><span>求助：215</span></p>
+                    <span class="nickname">{{item.nickname}}</span>
+                    <p><span>采纳率：{{(item.adopt*100).toFixed(2)}}%</span><span>求助：{{item.help_total}}</span></p>
                 </div>
              </div>
-             <span class="swiper-slide-item-title-right swiper-orange">已采纳</span>
+             <span v-if="item.status==='0'" class="swiper-slide-item-title-right">已失效</span>
+             <span v-else-if="item.status==='1'" class="swiper-slide-item-title-right swiper-blue">进行中</span>
+             <span v-else-if="item.status==='2'" class="swiper-slide-item-title-right swiper-orange">已采纳</span>
+             <span v-else class="swiper-slide-item-title-right">已完成</span>
           </div>
-          <p class="swiper-slide-item-text">商品的描述详情信息息，商品描述详情信息，商品描述详情信息，商品描述详情信息，商品描述详情信息，商品描述详情信，商品描述详情信息想睡觉打卡机，超过一行内容则显示...</p>
-          <div class="swiper-slide-item-img">
-               <div><img src="../assets/img/10_2x.png" alt=""></div>
-               <div><img src="../assets/img/pic_huodong3.png" alt=""></div>
+          <p class="swiper-slide-item-text" v-html="item.content"></p>
+          <div class="swiper-slide-item-img" v-if="item.pics.length==1">
+               <div><img :src="item.pics[0]" alt=""></div>
                <div></div>
+               <div></div>
+          </div>
+          <div class="swiper-slide-item-img" v-else-if="item.pics.length==2">
+               <div><img :src="item.pics[0]" alt=""></div>
+               <div><img :src="item.pics[1]" alt=""></div>
+               <div></div>
+          </div>
+          <div class="swiper-slide-item-img" v-else-if="item.pics.length>=3">
+               <div><img :src="item.pics[0]" alt=""></div>
+               <div><img :src="item.pics[0]" alt=""></div>
+               <div><img :src="item.pics[0]" alt=""></div>
+          </div>
+          <div class="swiper-slide-item-img" v-else>
           </div>
           <div class="swiper-slide-item-info">
               <div class="swiper-slide-item-info-num">
-                  <span>悬赏：</span><span>￥180</span>
+                  <span>悬赏：</span><span>￥{{item.money}}</span>
               </div>
               <div class="swiper-slide-item-info-conact">
-                  <span>2017-10-15 10:53</span><span>线上</span><span> 回答(7)</span>
-              </div>
-          </div>
-      </li>
-      <li class="swiper-slide-item swiper-del">
-          <div class="swiper-slide-item-title">
-             <div class="swiper-slide-item-title-left">
-                <img src="../assets/img/2@2x.png" alt="">
-                <div class="swiper-slide-item-title-text">
-                    <span class="nickname">用户昵称</span>
-                    <p><span>采纳率：98%</span><span>求助：215</span></p>
-                </div>
-             </div>
-             <span class="swiper-slide-item-title-right">已作废</span>
-          </div>
-          <p class="swiper-slide-item-text">商品的描述详情信息息，商品描述详情信息，商品描述详情信息，商品描述详情信息，商品描述详情信息，商品描述详情信，商品描述详情信息想睡觉打卡机，超过一行内容则显示...</p>
-          <div class="swiper-slide-item-img">
-               <div><img src="../assets/img/10_2x.png" alt=""></div>
-               <div><img src="../assets/img/pic_huodong3.png" alt=""></div>
-               <div></div>
-          </div>
-          <div class="swiper-slide-item-info">
-              <div class="swiper-slide-item-info-num">
-                  <span>悬赏：</span><span>￥180</span>
-              </div>
-              <div class="swiper-slide-item-info-conact">
-                  <span>2017-10-15 10:53</span><span>线上</span><span> 回答(7)</span>
-              </div>
-          </div>
-      </li>
-      <li class="swiper-slide-item">
-          <div class="swiper-slide-item-title">
-             <div class="swiper-slide-item-title-left">
-                <img src="../assets/img/2@2x.png" alt="">
-                <div class="swiper-slide-item-title-text">
-                    <span class="nickname">用户昵称</span>
-                    <p><span>采纳率：98%</span><span>求助：215</span></p>
-                </div>
-             </div>
-             <span class="swiper-slide-item-title-right swiper-blue">进行中</span>
-          </div>
-          <p class="swiper-slide-item-text">商品的描述详情信息息，商品描述详情信息，商品描述详情信息，商品描述详情信息，商品描述详情信息，商品描述详情信，商品描述详情信息想睡觉打卡机，超过一行内容则显示...</p>
-          <div class="swiper-slide-item-img">
-               <div><img src="../assets/img/10_2x.png" alt=""></div>
-               <div><img src="../assets/img/pic_huodong3.png" alt=""></div>
-               <div></div>
-          </div>
-          <div class="swiper-slide-item-info">
-              <div class="swiper-slide-item-info-num">
-                  <span>悬赏：</span><span>￥180</span>
-              </div>
-              <div class="swiper-slide-item-info-conact">
-                  <span>2017-10-15 10:53</span><span>线上</span><span> 回答(7)</span>
-              </div>
-          </div>
-      </li>
-      <li class="swiper-slide-item">
-          <div class="swiper-slide-item-title">
-             <div class="swiper-slide-item-title-left">
-                <img src="../assets/img/2@2x.png" alt="">
-                <div class="swiper-slide-item-title-text">
-                    <span class="nickname">用户昵称</span>
-                    <p><span>采纳率：98%</span><span>求助：215</span></p>
-                </div>
-             </div>
-             <span class="swiper-slide-item-title-right">已完成</span>
-          </div>
-          <p class="swiper-slide-item-text">商品的描述详情信息息，商品描述详情信息，商品描述详情信息，商品描述详情信息，商品描述详情信息，商品描述详情信，商品描述详情信息想睡觉打卡机，超过一行内容则显示...</p>
-          <div class="swiper-slide-item-img">
-               <div><img src="../assets/img/10_2x.png" alt=""></div>
-               <div><img src="../assets/img/pic_huodong3.png" alt=""></div>
-               <div></div>
-          </div>
-          <div class="swiper-slide-item-info">
-              <div class="swiper-slide-item-info-num">
-                  <span>悬赏：</span><span>￥180</span>
-              </div>
-              <div class="swiper-slide-item-info-conact">
-                  <span>2017-10-15 10:53</span><span>线上</span><span> 回答(7)</span>
+                  <span>{{item.created_at}}</span><span>{{item.type_str}}</span><span> 回答({{item.answer_count}})</span>
               </div>
           </div>
       </li>
@@ -110,6 +47,16 @@
 </template>
 
 <script>
+export default {
+  props: {
+    data: {
+      type: Array,
+      default: []
+    }
+  },
+  methods: {
+  }
+}
 </script>
 
 <style scoped>

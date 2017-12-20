@@ -89,12 +89,13 @@
       },
       data: {
         type: Array,
-        default: []
+        default: () => []
       }
     },
     methods: {
       godetails (item) {
-        this.$router.push({ path: `/zixundetails/${item.id}/${item.attribute.id}` })
+        let timestamp = Date.parse(new Date())
+        this.$router.push({ path: `/zixundetails/${timestamp}/${item.id}/${item.attribute.id}` })
       },
       editzixun (item) {
         console.log(item)

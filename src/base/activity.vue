@@ -1,28 +1,17 @@
 <template>
   <div>
     <ul>
-      <li class="activity-item">
-        <div class="activity-item-left"><img src="../assets/img/11_2x.png" alt=""></div>
+      <li class="activity-item" v-for="(item,index) in data">
+        <div class="activity-item-left"><img :src="item.pics[0]" alt=""></div>
         <div class="activity-item-right">
-          <h4>活动名称活动名称活动名称活动名称活动名称活...</h4>
-          <p>2017.12.08 9:00 开始</p>
-          <p>中和社区</p>
+          <h4>{{item.name}}</h4>
+          <p>{{item.start_time}} 开始</p>
+          <p>{{item.name}}</p>
           <div class="activity-item-right-div">
-            <span class="activity-item-right-blue">可报名</span>
-            <p><span>￥</span><span class="activity-item-right-moeny">99</span><span>起</span></p>
+            <span class="activity-item-right-blue">{{item.status_str}}</span>
+            <p><span>￥</span><span class="activity-item-right-moeny">{{item.costs}}</span><span>起</span></p>
           </div>
-        </div>
-      </li>
-      <li class="activity-item">
-        <div class="activity-item-left"><img src="../assets/img/11_2x.png" alt=""></div>
-        <div class="activity-item-right">
-          <h4>活动名称活动名称活动名称活动名称活动名称活...</h4>
-          <p>2017.12.08 9:00 开始</p>
-          <p>中和社区</p>
-          <div class="activity-item-right-div">
-            <span class="activity-item-right-blue">可报名</span>
-            <p><span>￥</span><span class="activity-item-right-moeny">99</span><span>起</span></p>
-          </div>
+          <div v-show="fromindex==='mine' && item.status_str === '正在报名'" class="edititem"><span>修改</span></div>
         </div>
       </li>
     </ul>
@@ -30,6 +19,18 @@
 </template>
 
 <script>
+export default {
+  props: {
+    data: {
+      default: [],
+      type: Array
+    },
+    fromindex: {
+      type: String,
+      default: ''
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -82,5 +83,12 @@
   }
   .activity-item-right-moeny{
     font-size: 1rem;
+  }
+  .edititem span{
+    background-color: rgb(240,88,18);
+    padding: 2px 10px;
+    font-size: 0.6rem;
+    border-radius: 5px;
+    color: #fff;
   }
 </style>

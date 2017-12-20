@@ -2,9 +2,9 @@
   <div id="app" >
     <div v-show="!flag">
       <!--<Index></Index>-->
-
+      <keep-alive>
         <router-view></router-view>
-
+      </keep-alive> 
       <foot></foot>
     </div>
     <div class="advertising" ref="advertising" v-show="flag">

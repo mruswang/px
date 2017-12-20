@@ -1,20 +1,32 @@
 <template>
   <div>
-    <div class="dothing">
-      <a href="javascript:;">锦江区工伤保险统筹管理的申请、确认程序的申请、确认程序</a>
-      <a href="javascript:;">锦江区工伤保险统筹管理的申请、确认程序</a>
-      <a href="javascript:;">锦江区工伤保险统筹管理的申请、确认程序</a>
+    <div class="dothing" :class="{'nobottom': fromindex === 'jigou'}">
+      <a href="javascript:;" v-for="(item,index) in data">{{item.title}}</a>
     </div>
   </div>
 </template>
 
-<script type="text/ecmascript-6">
-
+<script>
+export default {
+  props: {
+    data: {
+      type: Array,
+      default: () => []
+    },
+    fromindex: {
+      type: String,
+      default: ''
+    }
+  }
+}
 </script>
 
 <style scoped>
   .dothing{
     padding:.5rem;background: #fff;margin-bottom: .5rem;margin-bottom: 60px;
+  }
+  .nobottom{
+    margin-bottom: 0;
   }
   .dothing > a{
     color:#2AB0F1;font-size:.75rem;height:2.5rem;display: block;

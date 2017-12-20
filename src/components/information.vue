@@ -1,10 +1,8 @@
 <template>
   <div class="container">
-    <sticky :offset="46">
-      <tab :line-width=3 >
-        <tab-item :selected="top_index === item"  v-for="(item, index) in listtop" @on-item-click="democlcik(index)" :key="index">{{item}}</tab-item>
-      </tab>
-    </sticky>
+    <ul class="topnav">
+      <li v-for="(item,index) in listtop" @click="slect(item)" :class="{'active':item.news_cat_id === cat_id}">{{item.name}}</li>
+    </ul>
     <scroller ref="scroll" class="scroll"
         :data="list"
         :pulldown="pulldown"
@@ -13,34 +11,30 @@
         @scrollToEnd="pullupdata"
         :refreshDelay="refreshDelay">
       <div class="scroll-content">
-        <activity :data="list" :fromindex="fromindex"></activity>
+        <zixun :data="list"></zixun>
         <div class="alldata" v-show="nodata">我是有底线的</div>
       </div>
     </scroller>
-    <add :url="url"></add>
   </div>
 </template>
 
 <script>
 import { Tab, TabItem, Sticky, Divider, XButton } from 'vux'
 import scroller from 'base/scroller'
-import activity from 'base/activity'
-import add from 'base/add'
+import zixun from 'base/zixun'
 export default{
   components: {
     scroller,
-    activity,
+    zixun,
     Tab,
     TabItem,
     Sticky,
     Divider,
-    XButton,
-    add
+    XButton
   },
   data () {
     return {
-      listtop: ['我的发布', '我的参与'],
-      top_index: '我的发布',
+      listtop: [],
       index: 0,
       url: 'push_help',
       page: 1,
@@ -50,31 +44,28 @@ export default{
       pullup: true,
       nodata: false,
       refreshDelay: 500,
-      topnum: 0,
-      fromindex: 'mine'
+      cat_id: 0,
+      geturl: 'http://peicentapi.demo.sclonsee.com/v1/news/index'
     }
   },
   created () {
-    setTimeout(() => {
-      this._loadgetData()
-    }, 30)
+    this._loadinterest()
+    // setTimeout(() => {
+    //   this._loadData()
+    // }, 30)
   },
   methods: {
-    _loadgetData () {
-      this.$http.get('http://peicentapi.demo.sclonsee.com/v1/activity/index', {params: { target_id: this.$route.params.id, page: this.page, flag: 3, from: 0 }}).then(response => {
-        this.list = this.list.concat(response.data.data)
-        if (response.data.data.length > 0) {
-          this.all = this.list.length
-        } else {
-          this.nodata = true
-        }
-        console.log(this.list)
+    _loadinterest () {
+      this.$http.get('http://peicentapi.demo.sclonsee.com/v1/member/member-interest', {params: { member_id: 9 }}).then(response => {
+        this.listtop = response.data.data
+        this.cat_id = this.listtop[0].news_cat_id
+        this._loadData()
       }, response => {
         alert(response)
       })
     },
-    _loadjionData () {
-      this.$http.get('http://peicentapi.demo.sclonsee.com/v1/activity/my-join', {params: { member_id: this.$route.params.id, page: this.page, flag: 3, from: 0 }}).then(response => {
+    _loadData () {
+      this.$http.get(this.geturl, {params: { cat_id: this.cat_id, page: this.page, flag: 3, province_id: 51, city_id: 510100000000, region_id: 510104000000, street_id: 510104020000, community_id: 659004502528 }}).then(response => {
         this.list = this.list.concat(response.data.data)
         if (response.data.data.length > 0) {
           this.all = this.list.length
@@ -89,11 +80,7 @@ export default{
     pullupdata () {
       if (!this.nodata) {
         this.page ++
-        if (this.topnum === 1) {
-          this._loadjionData()
-        } else {
-          this._loadgetData()
-        }
+        this._loadData()
       } else {
         this.nodata = true
       }
@@ -103,15 +90,11 @@ export default{
       this.list = []
       this._loadData()
     },
-    democlcik (demo) {
+    slect (item) {
       this.page = 1
       this.list = []
-      this.topnum = demo
-      if (demo === 1) {
-        this._loadjionData()
-      } else {
-        this._loadgetData()
-      }
+      this.cat_id = item.news_cat_id
+      this._loadData()
     }
   }
 }
@@ -140,23 +123,21 @@ export default{
   text-align: center;
   background-color: #dedede;
 }     
-.box {
-  padding: 15px;
+.topnav{
+  // padding:0 10px;
+  width: 100%;
+  overflow-x:auto;
+  white-space:nowrap;
+  margin-top: 10px;
 }
-.active-6-1 {
-  color: rgb(252, 55, 140) !important;
-  border-color: rgb(252, 55, 140) !important;
-}
-.active-6-2 {
-  color: #04be02 !important;
-  border-color: #04be02 !important;
-}
-.active-6-3 {
-  color: rgb(55, 174, 252) !important;
-  border-color: rgb(55, 174, 252) !important;
-}
-.tab-swiper {
-  background-color: #fff;
-  height: 100px;
-}
+.topnav li{
+  padding: 0 5px;
+  border-radius: 50%;
+  margin: 5px;
+  display: inline-block;
+ }
+ .active{
+    color: rgb(240,88,18);
+    border-bottom: 2px solid rgb(240,88,18);
+ }
 </style>

@@ -5,15 +5,15 @@
         <img slot="icon"  src="../assets/img/icon_index-sel_2x.png">
         <span slot="label">首页</span>
       </tabbar-item>
-      <tabbar-item>
+      <tabbar-item link="/information">
         <img slot="icon" src="../assets/img/icon_dtai.png">
-        <span slot="label">资讯</span>
+        <span slot="label" >资讯</span>
       </tabbar-item>
       <tabbar-item class='foot-fa'>
         <img class='foot-fa-img' slot="icon" src="../assets/img/icon_tjia_2x.png">
         <span slot="label"></span>
       </tabbar-item>
-      <tabbar-item>
+      <tabbar-item link="/seat">
         <img slot="icon" src="../assets/img/icon_dz.png">
         <span slot="label">订座</span>
       </tabbar-item>
