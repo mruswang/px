@@ -4,77 +4,49 @@ const views = require('koa-views')
 const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
-const logger = require('koa-logger')
+var router = require('koa-router')();
+const response_formatter = require('./middlewares/response_formatter');
+app.use(response_formatter('^/api'));
+var log4js = require('log4js');
+log4js.configure({
+  appenders: { cheese: { type: 'file', filename: 'cheese.log' } },
+  categories: { default: { appenders: ['cheese'], level: 'error' } }
+});
+
+const logger = log4js.getLogger('cheese');
+logger.trace('Entering cheese testing');
+logger.debug('Got cheese.');
+logger.info('Cheese is Gouda.');
+logger.warn('Cheese is quite smelly.');
+logger.error('Cheese is too ripe!');
+logger.fatal('Cheese was breeding ground for listeria.');
 
 const index = require('./routes/index')
 const users = require('./routes/users')
-//log工具
-var log4js = require('log4js');
-var log = log4js.getLogger("app");
+
 // error handler
 onerror(app)
-
+const api = require('./routes/api');
 // middlewares
 app.use(bodyparser({
   enableTypes:['json', 'form', 'text']
 }))
 app.use(json())
-app.use(logger())
+// app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
 
 app.use(views(__dirname + '/views', {
   extension: 'pug'
 }))
 
-app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'auto' }));
-
-if(app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        log.error("Something went wrong:", err);
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-    log.error("Something went wrong:", err);
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
-});
-
-// logger
-// app.use(async (ctx, next) => {
-//   //响应开始时间
-//   const start = new Date();
-//   //响应间隔时间
-//   var ms;
-//   try {
-//     //开始进入到下一个中间件
-//     await next();
-
-//     ms = new Date() - start;
-//     //记录响应日志
-//     logUtil.logResponse(ctx, ms);
-
-//   } catch (error) {
-    
-//     ms = new Date() - start;
-//     //记录异常日志
-//     logUtil.logError(ctx, error, ms);
-//   }
-// });
-
+router.use('/', index.routes(), index.allowedMethods());
+router.use('/users', users.routes(), users.allowedMethods());
+router.use('/api', api.routes(), api.allowedMethods());
+app.use(router.routes(), router.allowedMethods());
 // routes
-app.use(index.routes(), index.allowedMethods())
-app.use(users.routes(), users.allowedMethods())
+// router.use('/api', api.routes(), api.allowedMethods());
+// app.use(index.routes(), index.allowedMethods())
+// app.use(users.routes(), users.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
