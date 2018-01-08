@@ -137,6 +137,13 @@
           }
           this.imglist.push(obj)
         }
+        this.$http.post('/api/addinformation', {params: {imglist: this.imglist}}).then(response => {
+          // let config = response.data.data
+          // this.$wechat.config(config)
+          console.log(response)
+        }, response => {
+          alert(response)
+        })
         console.log(this.inname)
       }
     }
