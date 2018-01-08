@@ -1,7 +1,7 @@
 <template>
   <div class="push-imfo">
     <group gutter='0'>
-      <x-input placeholder="请输入资讯标题" required :show-clear="true" placeholder-align="left"></x-input>
+      <x-input placeholder="请输入资讯标题" v-model="titlevalue" required :show-clear="true" placeholder-align="left"></x-input>
     </group>
     <div v-for="(item,index) in items" :index="index+1">
       <group gutter='0' class="text">
@@ -59,7 +59,8 @@
         interest: [],
         inname: [],
         chdudata: [],
-        city: []
+        city: [],
+        titlevalue: ''
       }
     },
     components: {
@@ -137,7 +138,7 @@
           }
           this.imglist.push(obj)
         }
-        this.$http.post('/api/addinformation', {params: {imglist: this.imglist}}).then(response => {
+        this.$http.post('/api/addinformation', {params: { imglist: this.imglist, titlevalue: this.titlevalue }}).then(response => {
           // let config = response.data.data
           // this.$wechat.config(config)
           console.log(response)
