@@ -8,7 +8,7 @@
       <li><img src="../assets/img/2@2x.png" alt=""><span></span></li>
       <li><img src="../assets/img/2@2x.png" alt=""><span></span></li>
       <li><img src="../assets/img/2@2x.png" alt=""><span></span></li> -->
-      <li class="uploader-box" :class="`box${name}`">
+      <li class="uploader-box">
         <input type="file" name="file" ref="file" value=""  multiple @change="imgChange" />
       </li>
     </ul>
@@ -20,12 +20,6 @@
     data () {
       return {
         imglist: []
-      }
-    },
-    props: {
-      name: {
-        default: '',
-        type: String
       }
     },
     methods: {

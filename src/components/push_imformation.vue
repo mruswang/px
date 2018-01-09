@@ -7,24 +7,24 @@
       <group gutter='0' class="text">
         <x-textarea :max="300" ref="contenttext" :height="height" placeholder="请填写内容"></x-textarea>
       </group>
-      <upload-img ref="contentimg" :name="index+1" ></upload-img>
+      <upload-img ref="contentimg" ></upload-img>
     </div>
     <section class="addel" @click="add">
       <img src="../assets/img/icon_add@2x.png" alt="">
     </section>
     <section class="coverimg">
       <p class="tetx">封面图</p>
-      <upload-img name="fen"></upload-img>
+      <upload-img ref="fen"></upload-img>
     </section>
     <section class="other-set">
       <p>其他设置</p>
       <group gutter='0'>
         <popup-picker title="所属兴趣" inline-desc="只能选择一个,未选择仅在个人主页展示" v-model="inname" :data="interest" :columns="1" show-name></popup-picker>
-        <popup-picker title="所属城市" v-model="city" :data="chdudata" :columns="4" show-name ></popup-picker>
-        <popup-picker title="所属社区" :inline-desc="`[${formatDemoValue}]`" v-model="formatDemoValue" :data="[['01','02','03']]" :display-format="format"></popup-picker>
+        <popup-picker title="所属城市" v-model="city" :data="chdudata" :columns="4" show-name @on-hide="cityhide"></popup-picker>
+        <popup-picker title="所属社区" v-model="shequ" :data="shequarr" :columns="1" show-name></popup-picker>
         <x-switch title="开启赞赏" inline-desc="开启后可接收他人的赞赏" v-model="switch6"></x-switch>
         <checklist  :options="commonList" v-model="radioValue" :max="1" @on-change="change"></checklist>
-        <x-input v-show="radioValue == '转载文章'" placeholder="请输入转载出处" required :show-clear="true" placeholder-align="left"></x-input>
+        <x-input v-show="radioValue == '转载文章'" placeholder="请输入转载出处" required :show-clear="true" placeholder-align="left" v-model="fromsvalue"></x-input>
       </group>
     </section>
 
@@ -46,11 +46,6 @@
     data () {
       return {
         height: 200,
-        formatDemoValue: ['01'],
-        formatValue: ['01'],
-        format: function (value) {
-          return `${value}`
-        },
         switch6: false,
         commonList: [ '原创文章', '转载文章' ],
         radioValue: ['原创文章'],
@@ -60,7 +55,10 @@
         inname: [],
         chdudata: [],
         city: [],
-        titlevalue: ''
+        shequarr: [],
+        titlevalue: '',
+        shequ: [],
+        fromsvalue: ''
       }
     },
     components: {
@@ -117,6 +115,23 @@
           alert(response)
         })
       },
+      cityhide (type) {
+        console.log(this.city)
+        this.$http.get('http://peicentapi.demo.sclonsee.com/v1/index/area', {params: {parent_id: this.city[3]}}).then(response => {
+          let newshequ = response.data.data
+          console.log(newshequ)
+          newshequ.map((item, index) => {
+            this.shequarr.push({
+              name: item.label,
+              value: item.value,
+              parent: 0
+            })
+          })
+          console.log(this.shequarr)
+        }, response => {
+          alert(response)
+        })
+      },
       add () {
         console.log(this.items)
         this.items ++
@@ -138,7 +153,17 @@
           }
           this.imglist.push(obj)
         }
-        this.$http.post('/api/addinformation', {params: { imglist: this.imglist, titlevalue: this.titlevalue }}).then(response => {
+        console.log(this.titlevalue)
+        console.log(this.imglist)
+        // 获取封面图的数据
+        let feng = this.$refs.fen.$vnode.elm.children[0].children
+        let fengarr = []
+        for (let a = 0; a < feng.length; a++) {
+          if (!hasClass(feng[a], 'uploader-box')) {
+            fengarr.push(feng[a].children[0].src)
+          }
+        }
+        this.$http.post('/api/addinformation', {params: { imglist: this.imglist, title: this.titlevalue, feng: fengarr, interest: this.inname, city: this.city, shequ: this.shequ, zan: this.switch6, from: this.radioValue, fromsvalue: this.fromsvalue }}).then(response => {
           // let config = response.data.data
           // this.$wechat.config(config)
           console.log(response)
