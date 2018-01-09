@@ -1,77 +1,45 @@
 <template>
   <div>
     <ul class="uploader-img">
-      <!--<li><img src="../assets/img/2@2x.png" alt=""><span></span></li>-->
+      <li v-for="(item,index) in imglist"><img :src="item" alt=""><span @click="del(index)"></span></li>
       <!--<li><img src="../assets/img/2@2x.png" alt=""><span></span></li>-->
       <!-- <li><img src="../assets/img/2@2x.png" alt=""><span></span></li>
       <li><img src="../assets/img/2@2x.png" alt=""><span></span></li>
       <li><img src="../assets/img/2@2x.png" alt=""><span></span></li>
       <li><img src="../assets/img/2@2x.png" alt=""><span></span></li>
       <li><img src="../assets/img/2@2x.png" alt=""><span></span></li> -->
-      <li class="uploader-box" :class="`box${name}`" @click="chose(`box${name}`)"></li>
+      <li class="uploader-box" :class="`box${name}`">
+        <input type="file" name="file" ref="file" value=""  multiple @change="imgChange" />
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
-  import { XTextarea, Group, XInput } from 'vux'
   export default {
     data () {
       return {
-        height: 200,
-        i: 0
+        imglist: []
       }
     },
     props: {
-      name: '',
-      default: String
-    },
-    components: {
-      XTextarea,
-      Group,
-      XInput
+      name: {
+        default: '',
+        type: String
+      }
     },
     methods: {
-      onEvent (event) {
-        console.log('on', event)
-      },
-      chose (index) {
-        console.log(index)
-        this.$wechat.chooseImage({
-          count: 9, // 默认9
-          sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
-          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-          success: function (res) {
-            let localIds = res.localIds
-            this.uploadimgtowe(localIds, index)
-          }
-        })
-      },
-      uploadimgtowe (localIds, index) {
-        let length = localIds.length
-        this.upload(localIds, length)
-      },
-      upload (localIds, length) {
-        if (localIds[this.i].indexOf('wxlocalresource') !== -1) {
-          localIds[this.i] = localIds[this.i].replace('wxlocalresource', 'wxLocalResource')
+      imgChange () {
+        let file = this.$refs.file
+        let fileList = file.files
+        for (var i = 0; i < fileList.length; i++) {
+          let imgUrl = window.URL.createObjectURL(fileList[i])
+          this.imglist.push(imgUrl)
         }
-        this.$wechat.uploadImage({
-          localId: localIds[this.i].toString(),
-          success: function (res) {
-            alert(res)
-            // serverIdf+=res.serverId+'|';
-//            var _html = '<li><img src='+localIds[i]+' alt='+res.serverId+'><span></span></li>'
-//            $('.box'+index).parent().prepend(_html)
-            this.i++
-            if (this.i < length) {
-              this.upload()
-            }
-          },
-          fail: function (res) {
-          }
-        })
+      },
+      del (index) {
+        this.imglist.splice(index, 1)
       }
-
     }
   }
 </script>
@@ -82,6 +50,16 @@
     height: 77px;
     border: 1px solid #D9D9D9;
     position: relative;
+  }
+  .uploader-box input{
+    width: 77px;
+    height: 77px;
+    display: block;
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
   }
   .uploader-box:before {
     width: 2px;
@@ -121,6 +99,7 @@
     width: 77px;
     height: 77px;
     margin-right: 5px;
+    transform: rotate(0deg);
   }
   .uploader-img li span{
     position: absolute;
