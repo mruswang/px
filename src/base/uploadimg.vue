@@ -27,9 +27,47 @@
         let file = this.$refs.file
         let fileList = file.files
         for (var i = 0; i < fileList.length; i++) {
-          let imgUrl = window.URL.createObjectURL(fileList[i])
-          this.imglist.push(imgUrl)
+          // let imgUrl = window.URL.createObjectURL(fileList[i])
+          console.log(fileList[i])
+          // this.imglist.push(imgUrl)
+          const formData = new FormData()
+
+          // type
+          formData.append('type', fileList[i].type)
+          // size
+          formData.append('size', fileList[i].size)
+          // name
+          formData.append('name', fileList[i].name)
+          // lastModifiedDate
+          formData.append('lastModifiedDate', fileList[i].lastModifiedDate)
+          // append 文件
+          formData.append('file', fileList[i])
+          this.uploadImg(formData)
         }
+      },
+      uploadImg (formData) {
+        var _this = this
+        const xhr = new XMLHttpRequest()
+        // 进度监听
+        xhr.upload.addEventListener('progress', (e) => { console.log(e.loaded / e.total) }, false)
+        // 加载监听
+        // xhr.addEventListener('load', ()=>{console.log("加载中");}, false);
+        // 错误监听
+        xhr.addEventListener('error', () => { alert('上传失败！', 2000, undefined, false) }, false)
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            const result = JSON.parse(xhr.responseText)
+            if (xhr.status === 200) {
+                // 上传成功
+              console.log(result)
+              _this.imglist.push(result.filename)
+            } else {
+                // 上传失败
+            }
+          }
+        }
+        xhr.open('POST', '/api/upload', true)
+        xhr.send(formData)
       },
       del (index) {
         this.imglist.splice(index, 1)
